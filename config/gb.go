@@ -27,7 +27,11 @@ func (m *MongoColletions) AllTask()(interface{},error){
 	if err != nil {
 		return nil, err
 		}
-		return result, nil
+		var tasks []model.Task
+		if err := result.All(context.Background(), &tasks); err != nil {
+			return nil, err
+			}
+		return tasks, nil
 }
 
 
