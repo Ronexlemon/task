@@ -50,3 +50,29 @@ func Update(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(result)
 
 }
+
+func Tasks(w http.ResponseWriter, r *http.Request){
+	taskConnect := config.Connection()
+	result, err := taskConnect.AllTask()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(result)
+}
+
+func Delete(w http.ResponseWriter, r *http.Request){
+	params := mux.Vars(r)
+	id := params["id"]
+	taskConnect := config.Connection()
+	result, err := taskConnect.DeleteTask(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(result)
+}
